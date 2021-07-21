@@ -1,4 +1,5 @@
 
+
 package com.rahul.kafka.config;
 
 import java.util.HashMap;
@@ -50,22 +51,15 @@ public class KafkaConsumerConfig implements KafkaListenerConfigurer {
 	}
 
 	@Bean
-	ErrorHandler errorHandler() {
-		return new SeekToCurrentErrorHandler((rec, ex) ->
-
-		{
-			log.info(" Error Occured STCEH  1: " + ex.getCause().getLocalizedMessage());
-			log.info(" Error Occured STCEH  2: " + ex.getCause());
-			log.info(" Error Occured STCEH  3: " + ex.getSuppressed());
-			// log.info(" Error Occured STCEH 5: " + ex.getMessage()); //
-			log.info(" Error Occured STCEH  6: " + ex.getLocalizedMessage());
-			// log.info(" Error Occured STCEH 7: " + ex.getClass()); //
-			log.info(" Error Occured STCEH  8: " + ex.fillInStackTrace());
-
-		}, new FixedBackOff(5000, 3));
-
-	}
-
+    public SeekToCurrentErrorHandler seekToCurrentErrorHandler() {
+        SeekToCurrentErrorHandler seekToCurrentErrorHandler = new SeekToCurrentErrorHandler((record, e) -> {
+            System.out.println("RECORD from topic " +record.topic()+
+                    " at partition "+record.partition()+" at offset "+record.offset()+
+                    " did not process correctly due to a "+ e.getCause());
+        }, new FixedBackOff(500L, 3L));
+        seekToCurrentErrorHandler.addNotRetryableExceptions(ArithmeticException.class,ArithmeticException.class);
+        return seekToCurrentErrorHandler;
+    }
 	@Bean public ConsumerFactory<String, ValidatedConsumerClass>
   consumerFactory() {
   
@@ -98,7 +92,7 @@ public class KafkaConsumerConfig implements KafkaListenerConfigurer {
 		ConcurrentKafkaListenerContainerFactory<String, ValidatedConsumerClass> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory());
 		factory.getContainerProperties().setAckMode(AckMode.RECORD);
-		factory.setErrorHandler(errorHandler());
+		factory.setErrorHandler(seekToCurrentErrorHandler());
 		return factory;
 	}
 
