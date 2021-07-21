@@ -8,8 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ValidatedConsumerClass {
 
 	@NotNull
-	@Max(value=10)
-	@JsonProperty("bar")
+	@JsonProperty(value="bar" , required = true)
 	private String bar;
 
 	public String getBar() {
