@@ -1,0 +1,21 @@
+
+package com.rahul.kafka.model;
+
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+
+public class FooBarValidator implements ConstraintValidator<ValidFooBar, ValidatedConsumerClass> {
+
+	@Override
+	public boolean isValid(ValidatedConsumerClass validatedConsumerClass, ConstraintValidatorContext context) {
+
+		System.out.println(" ---- In FooBarValidator----");
+		if (validatedConsumerClass.getBar() == null && validatedConsumerClass.getFoo() == null) {
+			return false;
+
+		}
+
+		return true;
+	}
+
+}
