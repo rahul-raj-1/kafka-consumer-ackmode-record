@@ -9,9 +9,11 @@ public class FooBarValidator implements ConstraintValidator<ValidFooBar, Validat
 	@Override
 	public boolean isValid(ValidatedConsumerClass validatedConsumerClass, ConstraintValidatorContext context) {
 
-		System.out.println(" ---- In FooBarValidator----");
-		if (validatedConsumerClass.getBar() == null && validatedConsumerClass.getFoo() == null) {
-			return false;
+		System.out.println("In  isValid 1 " + (validatedConsumerClass instanceof ValidatedConsumerClass));
+
+		if (validatedConsumerClass.getBar().getBid() == null) {
+           throw new IllegalArgumentException("getBid cannot be null");
+
 
 		}
 
