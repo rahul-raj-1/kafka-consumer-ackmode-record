@@ -1,20 +1,18 @@
 package com.rahul.kafka.model;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@ValidFooBar
 public class ValidatedConsumerClass {
 
 	@JsonProperty(value = "foo")
 	@NotNull
-	@Valid
 	private Foo foo;
 
 	@JsonProperty(value = "bar")
 	@NotNull
-	@Valid
 	private Bar bar;
 
 	public Foo getFoo() {
